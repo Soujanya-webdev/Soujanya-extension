@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ScrollMirror</title>
+  <link rel="stylesheet" href="popup.css"/>
+</head>
+<body class="sm-body">
+
+<!-- ── Header ───────────────────────────────────────────────── -->
+<div class="sm-header">
+  <div class="sm-header-left">
+    <div class="sm-logo-icon">🪞</div>
+    <div>
+      <div class="sm-logo-name">ScrollMirror</div>
+      <div class="sm-logo-date" id="header-date">today</div>
+    </div>
+  </div>
+  <div class="sm-streak-badge hidden" id="streak-badge" aria-label="Streak counter">
+    <span class="sm-flame" aria-hidden="true">🔥</span>
+    <span class="sm-streak-count" id="streak-count">0</span>
+    <span class="sm-streak-label">day streak</span>
+  </div>
+</div>
+
+<!-- ── Big Number ────────────────────────────────────────────── -->
+<div class="sm-hero">
+  <div class="sm-ring-wrap" aria-hidden="true">
+    <svg width="80" height="80" viewBox="0 0 80 80">
+      <defs>
+        <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#c084fc"/>
+          <stop offset="100%" stop-color="#818cf8"/>
+        </linearGradient>
+      </defs>
+      <circle cx="40" cy="40" r="34" stroke="rgba(160,100,255,0.1)" stroke-width="6" fill="none"/>
+      <circle id="ring-fill" cx="40" cy="40" r="34"
+              stroke="url(#rg)" stroke-width="6" fill="none"
+              stroke-linecap="round"
+              stroke-dasharray="213.6" stroke-dashoffset="213.6"
+              transform="rotate(-90 40 40)"/>
+    </svg>
+  </div>
+  <div class="sm-hero-text">
+    <div class="sm-total-mins" id="total-mins" aria-label="Total minutes scrolled today">
+      0<span class="sm-total-unit">m</span>
+    </div>
+    <div class="sm-total-label">scrolled today</div>
+    <div class="sm-budget-track"
+         role="progressbar" aria-valuenow="0"
+         aria-valuemin="0" aria-valuemax="100"
+         aria-label="Budget used">
+      <div class="sm-budget-fill" id="budget-bar"></div>
+    </div>
+    <div class="sm-budget-label" id="budget-label">of 60m budget</div>
+  </div>
+</div>
+
+<!-- ── Tabs ──────────────────────────────────────────────────── -->
+<div class="sm-tabs" role="tablist">
+  <button class="sm-tab sm-tab-active" data-tab="stats"
+          role="tab" aria-selected="true" aria-controls="panel-stats">Stats</button>
+  <button class="sm-tab" data-tab="chart"
+          role="tab" aria-selected="false" aria-controls="panel-chart">Chart</button>
+  <button class="sm-tab" data-tab="settings"
+          role="tab" aria-selected="false" aria-controls="panel-settings">Settings</button>
+</div>
+
+<!-- ── Panel: Stats ──────────────────────────────────────────── -->
+<div id="panel-stats" class="sm-panel" role="tabpanel">
+  <div class="sm-section-label">Today by site</div>
+  <div id="site-bars" class="sm-site-bars"></div>
+  <div class="sm-divider"></div>
+  <div class="sm-section-label">This week</div>
+  <div class="sm-week-mini" id="week-mini" aria-label="7-day mini bar chart"></div>
+  <button id="export-btn" class="sm-export-btn" aria-label="Download 7-day CSV">
+    ↓ Export 7-day CSV
+  </button>
+</div>
+
+<!-- ── Panel: Chart ──────────────────────────────────────────── -->
+<div id="panel-chart" class="sm-panel sm-panel-hidden" role="tabpanel">
+  <div class="sm-section-label">7-day scroll (minutes)</div>
+  <div class="sm-chart-card">
+    <canvas id="weekly-chart" aria-label="Weekly scroll chart" role="img"></canvas>
+  </div>
+  <div class="sm-chart-legend">
+    <div class="sm-legend-item">
+      <span class="sm-legend-dot sm-dot-ig"></span><span>Instagram</span>
+    </div>
+    <div class="sm-legend-item">
+      <span class="sm-legend-dot sm-dot-tt"></span><span>TikTok</span>
+    </div>
+    <div class="sm-legend-item">
+      <span class="sm-legend-dot sm-dot-yt"></span><span>YouTube</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Panel: Settings ───────────────────────────────────────── -->
+<div id="panel-settings" class="sm-panel sm-panel-hidden" role="tabpanel">
+
+  <div class="sm-setting-row">
+    <div class="sm-setting-info">
+      <div class="sm-setting-title">Daily Scroll Budget</div>
+      <div class="sm-setting-sub">Force a break when reached</div>
+    </div>
+    <div class="sm-setting-val" id="budget-display" aria-live="polite">60 min</div>
+  </div>
+  <input type="range" id="budget-slider"
+         min="15" max="180" step="15" value="60"
+         class="sm-slider"
+         aria-label="Daily budget in minutes"
+         aria-valuemin="15" aria-valuemax="180" aria-valuenow="60"/>
+  <div class="sm-slider-labels"><span>15m</span><span>3h</span></div>
+
+  <div class="sm-divider"></div>
+
+  <label class="sm-toggle-row" for="toggle-pomodoro">
+    <div class="sm-setting-info">
+      <div class="sm-setting-title">Pomodoro Mode</div>
+      <div class="sm-setting-sub">5-min break overlay at budget</div>
+    </div>
+    <div class="sm-toggle-wrap">
+      <input type="checkbox" id="toggle-pomodoro"
+             class="sm-toggle-input" checked
+             aria-label="Enable Pomodoro mode"/>
+      <span class="sm-toggle-track">
+        <span class="sm-toggle-thumb"></span>
+      </span>
+    </div>
+  </label>
+
+  <label class="sm-toggle-row" for="toggle-sound">
+    <div class="sm-setting-info">
+      <div class="sm-setting-title">Bowl Chime Sound</div>
+      <div class="sm-setting-sub">Plays at end of breathing session</div>
+    </div>
+    <div class="sm-toggle-wrap">
+      <input type="checkbox" id="toggle-sound"
+             class="sm-toggle-input" checked
+             aria-label="Enable bowl chime sound"/>
+      <span class="sm-toggle-track">
+        <span class="sm-toggle-thumb"></span>
+      </span>
+    </div>
+  </label>
+
+  <div class="sm-divider"></div>
+
+  <button id="save-prefs-btn" class="sm-save-btn">Save Settings</button>
+  <div id="save-toast" class="sm-toast sm-toast-hidden"
+       aria-live="polite" role="status">✓ Settings saved!</div>
+</div>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<div class="sm-footer">ScrollMirror v2 · all data stays on your device</div>
+
+<!-- Bundled local scripts — NO CDN, NO inline JS -->
+<script src="chart.umd.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>
