@@ -113,12 +113,18 @@ Customizable preferences include:
 - Sound enable/disable toggle
 
 ---
-## HOW TO LOAD (UNPACKED)
+### How to Install
+- Load Unpacked (Recommended)
+- Download the latest .zip file from Releases
+- Extract the archive
+Open your browser:
+Chrome: chrome://extensions/
+Brave: brave://extensions/
+Enable Developer Mode (top-right toggle)
+Click Load unpacked
+Select the extracted folder that directly contains manifest.json
 
-1. Open `chrome://extensions`  
-2. Enable **Developer Mode** (top-right toggle)  
-3. Click **Load unpacked**  
-4. Select the `ScrollMirrorV2` directory  
+If the extension does not activate, reload the target website.
 
 ### Once loaded
 
@@ -148,10 +154,7 @@ There are:
 - No analytics scripts  
 - No user accounts  
 - No external data transmission  
-
----
-
-## PHILOSOPHY
+ 
 
 ScrollMirror does not attempt to block behavior or enforce discipline through restriction.
 
