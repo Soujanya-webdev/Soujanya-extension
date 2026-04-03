@@ -30,7 +30,7 @@ Designed for real teen attention behavior patterns
 
 | Field        | Value |
 |--------------|------|
-| Version      | 2.0 |
+| Version      | 1.0 |
 | Manifest     | V3 (Service Worker) |
 | Target Sites | Instagram · TikTok · YouTube |
 | Permissions  | activeTab · scripting · storage · alarms |
@@ -134,7 +134,8 @@ If the extension does not activate, reload the target website.
 
 ---
 
-## TESTING GUIDE
+## TESTING GUIDE (DEMO)
+/icons/Soujanya-webdev (Soujanya D) - Google Chrome 2026-04-03 12-24-44.gif
 
 ### SCROLL TRACKING
 
